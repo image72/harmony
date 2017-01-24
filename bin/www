@@ -1,0 +1,23 @@
+#!/usr/bin/env node --harmony
+var config = require('../config');
+
+if (process.env.NODE_ENV === 'production' || config.env == 'production') {
+  process.env.webpackAssets = JSON.stringify(require('./dist/manifest.json'));
+  process.env.webpackChunkAssets = JSON.stringify(require('./dist/chunk-manifest.json'));
+  // In production, serve the webpacked server file.
+  require('../lib')(config.port);
+} else {
+  // Babel polyfill to convert ES6 code in runtime
+  require('babel-register')();
+  require('babel-polyfill');
+  require('../src')(config.port);
+}
+
+
+process.on('uncaughtException', err => {
+  console.error('uncaught exception:', err)
+});
+
+process.on('unhandledRejection', error => {
+  console.error('unhandled rejection:', error)
+});
