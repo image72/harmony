@@ -25,18 +25,17 @@ app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use('/public', express.static(path.join(__dirname, '../public')));
 
 
-
-
-
 if (isDev) {
   // require('./middleware/webpack')(app);
 }
 routes(app);
-const server = (port) => {
-  app.listen(config.port,  (err, result) => {
+const server = (port = config.port) => {
+  return app.listen(port,  (err, result) => {
     if(err){ console.log(err); }
     console.log(`Server running on port ${config.port} ${config.env}`);
   });
 }
 
-export default server;
+if (!module.parent) server(config.port);
+
+module.exports = server;

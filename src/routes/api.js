@@ -1,9 +1,11 @@
+import express from 'express';
+const router = express.Router();
 const { env } = require('../controller/process');
 
-const server = (app) => {
-  app.get('/env', (req, res, next) => {
-    res.json(`${env}`);
-  })
-}
 
-export default server
+router.get('/env', (req, res, next) => {
+  res.json(`${JSON.stringify(env)}`);
+})
+
+
+export default router;
