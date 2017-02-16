@@ -61,7 +61,68 @@ const pipe = (...fns) => {
     const promised = fn => (...args) => Promise.all(args).then(_args => fn.apply(null, _args))
     return (...args) => fns.map(promised).reduce((acc, cur) => [cur.apply(null, acc)], args)[0]
 };
+const promisify = (fn, receiver) => {
+  return function() {
+    // for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    //   args[_key] = arguments[_key];
+    // }
+    var args = [].slice.call(arguments);
 
+    return new Promise(function(resolve, reject) {
+      fn.apply(receiver, [].concat(args, [function(err, res) {
+        return err ? reject(err) : resolve(res);
+      }]));
+    });
+  };
+};
+
+const $$ = {},
+  toString = Object.prototype.toString,
+  forEach = Function.prototype.call.bind(Array.prototype.forEach);
+forEach(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+     $$['is'+name] = function(obj) {
+        return toString.call(obj) === '[object ' + name + ']' || false;
+    }
+})
+
+function isType(obj) {
+  return Object.prototype.toString.call(obj).replace(/^\[object (.+)\]$/, '$1').toLowerCase();
+}
+
+unction dateFormat(date, format) {
+  var o = {
+    "M+": date.getMonth() + 1, //month
+    "d+": date.getDate(), //day
+    "h+": date.getHours(), //hour
+    "m+": date.getMinutes(), //minute
+    "s+": date.getSeconds(), //second
+    "q+": Math.floor((date.getMonth() + 3) / 3), //quarter
+    "S": date.getMilliseconds() //millisecond
+  }
+  if (/(y+)/.test(format)) {
+    format = format.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+  }
+  for (var k in o) {
+    if (new RegExp("(" + k + ")").test(format)) {
+      format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+    }
+  }
+  return format;
+}
+function isFalsy(obj) {
+  return obj instanceof Object ?
+      Object.keys(obj).length < 1 :
+        (obj instanceof Array ? obj.length < 1 : (obj === null) || isNaN(obj) || (obj === void 0) || obj.length < 1 || !~~obj || false);
+}
+
+var qs2obj = (str) => {
+  return (str || document.location.search)
+    .replace(/(^\?)/, '')
+    .split("&")
+    .reduce(function(p, n) {
+      return n = n.split("="), p[n[0]] = decodeURIComponent(n[1]), p;
+    }, {});
+}
 export {
   wrap,
   renderError,
