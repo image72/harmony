@@ -12,7 +12,7 @@ router.get('/time', (req, res, next) => {
   res.send(`now: ${new Date()}`);
 })
 router.get('/home', (req, res, next) => {
-  res.send(renderFullPage(`${Math.random()}`));
+  res.send(renderFullPage(`${new Date()} ${Math.random()}`));
 })
 router.get('/*', (req, res, next) => {
   res.send(renderFullPage())

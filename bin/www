@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === 'production' || config.env == 'production') {
   require('../lib').server(config.port);
 } else {
   // Babel polyfill to convert ES6 code in runtime
+  // require('es6-module');
   require('babel-register')();
   require('babel-polyfill');
   require('../src')(config.port);
