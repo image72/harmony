@@ -15,7 +15,7 @@ router.get('/home', (req, res, next) => {
   res.send(renderFullPage(`${new Date()} ${Math.random()}`));
 })
 router.get('/*', (req, res, next) => {
-  res.send(renderFullPage())
+  res.status(404).send(renderFullPage('not found!'))
 })
 
 export default router;

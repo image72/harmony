@@ -22,8 +22,8 @@ const renderFullPage = (html = '', initialState = {}) => {
 <!doctype html>
 <html>
   <head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     ${isProduct ? `<link rel='stylesheet' href='${assetsManifest['/app.css']}' />` : ''}
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'/>
     <link rel="shortcut icon" href="http://res.cloudinary.com/hashnode/image/upload/v1455629445/static_imgs/mern/mern-favicon-circle-fill.png" type="image/png" />
   </head>
   <body>
